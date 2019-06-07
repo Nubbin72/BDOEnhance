@@ -127,19 +127,19 @@ function Item(id,level) {
 		if (this.level > 0) {
 			// TODO adjust the position of text for > +10
 			ctx.save()
-			ctx.font = "bold 20px Times";
+			ctx.font = "bold 20px cambria";
 			ctx.fillStyle = "white";
 			ctx.shadowBlur = 6;
 			ctx.shadowColor = "red";
 			if (this.level <= 9 && this.data.type != "accessory") {
 				ctx.fillText("+" + this.level, this.rect.x + 8, this.rect.y + 28);
 			} else if (this.level <= 15 && this.data.type != "accessory") {
-				ctx.fillText("+" + this.level, this.rect.x + 6, this.rect.y + 28);
+				ctx.fillText("+" + this.level, this.rect.x + 4, this.rect.y + 28);
 			} else {
 				switch (this.level) {
 					case 1:
 					case 16: 
-						ctx.fillText("I", this.rect.x + 18, this.rect.y + 28);
+						ctx.fillText("I", this.rect.x + 17, this.rect.y + 28);
 					break;
 					case 2:
 					case 17: 
@@ -522,9 +522,9 @@ function Enhancer(inventory) {
 		if (this.selected_item.item  != null) {
 			ctx.font = "20px Arial";
 			ctx.fillStyle = "#c6c6c6";
-			ctx.fillText("Enhancement Chance", this.position.x + 142, this.position.y + 90);
+			ctx.fillText("Enhancement Chance", this.position.x + 136, this.position.y + 90);
 			ctx.fillStyle = "#13a7de";
-			ctx.fillText(Number(this.chance).toFixed(2)  + "%", this.position.x + 348, this.position.y + 90);
+			ctx.fillText(Number(this.chance).toFixed(2)  + "%", this.position.x + 340, this.position.y + 90);
 		}
 		
 
