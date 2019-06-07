@@ -1,0 +1,212 @@
+data = {
+	"items":[
+		{
+			"id":0,
+			"name":"null",		
+			"image":"null"
+		},
+		{
+			"name":"Black Stone (Weapon)",
+			"image":"images/black_stone_weapon.png",
+			"type":"material",
+			"for":"weapon",
+			"grade":"normal",
+			"destroy":true
+		},
+		{
+			"name":"Black Stone (Armor)",
+			"image":"images/black_stone_armor.png",
+			"type":"material",
+			"for":"armor",
+			"grade":"normal",
+			"destroy":true
+		},
+		{
+			"name":"Concentrated Black Stone (Weapon)",
+			"image":"images/concetrated_black_stone_weapon.png",
+			"type":"material",
+			"for":"weapon",
+			"grade":"advanced",
+			"destroy":true
+		},
+		{
+			"name":"Concentrated Black Stone (Armor)",
+			"image":"images/concetrated_black_stone_armor.png",
+			"type":"material",
+			"for":"armor",
+			"grade":"advanced",
+			"destroy":true
+		},
+		{
+			"name":"Kzarka Longsword",		
+			"image":"images/kzarka.png",
+			"type":"weapon",
+			"grade":"yellow"
+		},
+		{
+			"name":"Dandelion Lancia",
+			"image":"images/dandelion.png",
+			"type":"weapon",
+			"grade":"yellow"
+		},
+		{
+			"name":"Reblath Shoes",
+			"image":"images/reblath.png",
+			"type":"armor",
+			"grade":"white"
+		},
+		{
+			"name":"Cook's Clothes",
+			"image":"images/cook.png",
+			"type":"clothes",
+			"grade":"blue",
+			"destroy":true
+		},
+		{
+			"name":"Advice of Valk",
+			"image":"images/advice_of_valk.png",
+			"type":"misc",
+			"grade":"white"
+		},
+		{
+			"name":"Ring of Crescent Guardian",
+			"image":"images/crescent_ring.png",
+			"type":"accessory",
+			"grade":"yellow",
+			"destroy":true
+		},
+		{
+			"name":"Ogre Ring",
+			"image":"images/ogre_ring.png",
+			"type":"accessory",
+			"grade":"yellow",
+			"destroy":true
+		},
+		{
+			"name":"Basilisk's Belt",
+			"image":"images/basilisk_belt.png",
+			"type":"accessory",
+			"grade":"yellow",
+			"destroy":true
+		}
+		
+		
+
+
+
+
+	],
+	"rates":{
+		"material":{
+			"max":1
+		},
+		"weapon":{ // Weapons
+			"free": 7,
+			"max":20,
+			"white":{
+
+			},
+			"green":{
+
+			},
+			"blue":{
+
+			},
+			"yellow":{
+				// Percentages:
+				// Base chance, increase per fs, fs sftcap, increase per fs after softcap, hardcap
+				"0":[100,0,0,0,0],
+				"1":[100,0,0,0,0],
+				"2":[100,0,0,0,0],
+				"3":[100,0,0,0,0],
+				"4":[100,0,0,0,0],
+				"5":[100,0,0,0,0],
+				"6":[100,0,0,0,0],
+				"7":[70,1,70,1.4,90],
+				"8":[20.41,2.04,70,0.41,90],
+				"9":[14.29,1.42,70,0.29,90],
+				"10":[10,1,70,0.20,90],
+				"11":[6.67,0.67,70,0.13,90],
+				"12":[4,0.4,70,0,0],
+				"13":[2.5,0.25,70,0,0],
+				"14":[2,0.2,70,0,0],
+				"15":[11.76,1.17,70,0.23,0],
+				"16":[7.69,0.7693,70,0.16,0],
+				"17":[6.25,0.625,70,0.12,0],
+				"18":[2,0.20,70,0,0],
+				"19":[0.3,0.03,70,0,0]
+			}
+		},
+		"armor":{ // Armor
+			"free": 5,
+			"max":20,
+			"white":{
+				// Percentages:
+				// Base chance, increase per fs, fs sftcap, increase per fs after softcap, hardcap
+				// Note: softcap, fs after softcap, and hardcap values are invalid
+				"0":[100,0,0,0,0],
+				"1":[100,0,0,0,0],
+				"2":[100,0,0,0,0],
+				"3":[100,0,0,0,0],
+				"4":[100,0,0,0,0],
+				"5":[70,1,70,1.8,90],
+				"6":[25.64,2.57,70,0.5,90],
+				"7":[17.24,1.725,70,1.4,90],
+				"8":[11.76,1.177,70,0.41,90],
+				"9":[7.69,0.77,70,0.29,90],
+				"10":[6.25,0.625,70,0.20,90],
+				"11":[5,0.5,70,0.13,90],
+				"12":[4,0.4,70,0,0],
+				"13":[2.86,0.284,70,0,0],
+				"14":[2,0.2,70,0,0],
+				"15":[11.76,1.17,70,0.23,0],
+				"16":[7.69,0.7693,70,0.16,0],
+				"17":[6.25,0.625,70,0.12,0],
+				"18":[2,0.20,70,0,0],
+				"19":[0.3,0.03,70,0,0]
+			},
+			"green":{
+
+			},
+			"blue":{
+
+			},
+			"yellow":{
+				"free":5,
+
+			}
+		},
+		"clothes":{ // Cooking, Alchemy, etc.
+			"free":0,
+			"max":5,
+			"blue":{
+				"0":[30,2.85,70,0.6,90],
+				"1":[10,1,50,0.2,90],
+				"2":[7.5,0.75,40.5,0.15,90],
+				"3":[2.5,0.25,70,0.5,90],
+				"4":[0.5,0.05,100,0,0]
+			}
+		},
+		"accessory":{ // Ring, Neckace, Belt, Earring
+			"free":0,
+			"max":5,
+			"white":{
+
+			},
+			"green":{
+
+			},
+			"blue":{
+
+			},
+			"yellow":{
+				"0":[25,2.5,70,0.5,90],
+				"1":[10,1.25,50,0.2,0],
+				"2":[7.5,0.75,40.5,0.15,0],
+				"3":[2.5,0.25,30,0.05,0],
+				"4":[0.5,0.05,0,0,0]
+			}
+		},
+	}
+
+}

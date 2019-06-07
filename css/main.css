@@ -1,0 +1,39 @@
+*{
+	margin:0;
+	padding:0;
+}
+
+body {
+	font-family:Georgia, "Times New Roman", Times, serif;
+}
+
+@font-face {
+	font-family: 'Titania';
+	src: url("../media/Titania-Regural.ttf");
+}
+
+#game-wrapper {
+	position:absolute;
+	margin: 0;
+	padding: 0;
+	left:0px; 
+	right:0px; 
+	top:0px; 
+	bottom:0px;
+	background-color:#000;
+	width:100%;
+	height:100%;
+	
+}
+
+
+#scene {
+	background-color:#ccc;
+	cursor: url('../images/cursor.cur'), auto;
+	
+}
+
+#status {
+	color: white;
+	background-color: red;
+}
