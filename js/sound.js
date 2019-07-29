@@ -29,6 +29,7 @@ function Sound (dataitem, loadHandler, ac){
 	this.feebackValue = 0.3;
 	this.filterValue = 0;
 	this.playTime = 0;
+
 	this.load = function() {
 		var that = this;
 		 var request = new XMLHttpRequest();
@@ -42,7 +43,7 @@ function Sound (dataitem, loadHandler, ac){
 					 loadHandler();
             	});
         };
-		request.onerror = function() { alert("error")};   
+		request.onerror = function() { alert("Error - Cannot acces audio file" + dataitem.url)};   
         request.send();	
 	}
 	

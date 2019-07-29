@@ -6,6 +6,7 @@ data = {
 			"image":"null"
 		},
 		{
+			"id":1,
 			"name":"Black Stone (Weapon)",
 			"image":"images/black_stone_weapon.png",
 			"type":"material",
@@ -13,7 +14,8 @@ data = {
 			"grade":"normal",
 			"destroy":true
 		},
-		{
+		{	
+			"id":2,
 			"name":"Black Stone (Armor)",
 			"image":"images/black_stone_armor.png",
 			"type":"material",
@@ -22,6 +24,7 @@ data = {
 			"destroy":true
 		},
 		{
+			"id":3,
 			"name":"Concentrated Black Stone (Weapon)",
 			"image":"images/concetrated_black_stone_weapon.png",
 			"type":"material",
@@ -30,6 +33,7 @@ data = {
 			"destroy":true
 		},
 		{
+			"id":4,
 			"name":"Concentrated Black Stone (Armor)",
 			"image":"images/concetrated_black_stone_armor.png",
 			"type":"material",
@@ -38,24 +42,28 @@ data = {
 			"destroy":true
 		},
 		{
+			"id":5,
 			"name":"Kzarka Longsword",		
 			"image":"images/kzarka.png",
 			"type":"weapon",
 			"grade":"yellow"
 		},
 		{
+			"id":6,
 			"name":"Dandelion Lancia",
 			"image":"images/dandelion.png",
 			"type":"weapon",
 			"grade":"yellow"
 		},
 		{
+			"id":7,
 			"name":"Reblath Shoes",
 			"image":"images/reblath.png",
 			"type":"armor",
 			"grade":"white"
 		},
 		{
+			"id":8,
 			"name":"Cook's Clothes",
 			"image":"images/cook.png",
 			"type":"clothes",
@@ -63,12 +71,14 @@ data = {
 			"destroy":true
 		},
 		{
+			"id":9,
 			"name":"Advice of Valk",
 			"image":"images/advice_of_valk.png",
 			"type":"misc",
 			"grade":"white"
 		},
 		{
+			"id":10,
 			"name":"Ring of Crescent Guardian",
 			"image":"images/crescent_ring.png",
 			"type":"accessory",
@@ -76,6 +86,7 @@ data = {
 			"destroy":true
 		},
 		{
+			"id":11,
 			"name":"Ogre Ring",
 			"image":"images/ogre_ring.png",
 			"type":"accessory",
@@ -83,11 +94,19 @@ data = {
 			"destroy":true
 		},
 		{
+			"id":12,
 			"name":"Basilisk's Belt",
 			"image":"images/basilisk_belt.png",
 			"type":"accessory",
 			"grade":"yellow",
 			"destroy":true
+		},
+		{
+			"id":13,
+			"name":"Blacksmith's Secret Book",
+			"image":"images/secret_book.png",
+			"type":"misc",
+			"grade":"white"
 		}
 		
 		

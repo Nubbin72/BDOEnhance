@@ -21,7 +21,9 @@ var data = [
 	{"url" : "images/ogre_ring.png"},
 	{"url" : "images/basilisk_belt.png"},
 	{"url" : "images/witch_earring.png"}, // TODO add upgrade rates for blue accessories
-	{"url" : "images/dim_tree_armor.png"} // TODO add upgrade rates for yellow armor
+	{"url" : "images/dim_tree_armor.png"}, // TODO add upgrade rates for yellow armor
+	{"url" : "images/secret_book.png"} 
+
 
 
 ];

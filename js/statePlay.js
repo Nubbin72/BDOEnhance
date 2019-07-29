@@ -21,6 +21,7 @@ function Slot(x,y,id, item_) {
 		}
 	}
 
+
 	this.copyItem = function(item) {
 		this.item = new Item(item.id, item.level);
 		this.item.rect = this.rect;
@@ -92,7 +93,7 @@ function Item(id,level) {
 	this.rect = new Rect({"x":0, "y":0, "w":49, "h":49});
 	this.level = level; // Get the enh. level from the JSON?
 	this.data = Game.data.items[id];
-	this.drag = false;
+
 	this.border_thickness = 1;
 
 	this.update = function() {
@@ -101,25 +102,23 @@ function Item(id,level) {
 		
 	this.draw = function(ctx) {
 
-		// In case of draggable objects
-		if (this.drag == false) {
-			// "Border"
-			if (this.data.grade == "yellow") {
-				// Yellow gear #9f854a
-				ctx.fillStyle = '#9f854a';
-			} else if (this.data.grade == "blue") {
-				// Blue gear #4698c4
-				ctx.fillStyle = '#4698c4';
-			} else {
-				ctx.fillStyle = '#3f4046';				
-			}
-
-			ctx.fillRect(this.rect.x - this.border_thickness, this.rect.y - this.border_thickness, this.rect.w + (this.border_thickness*2), this.rect.h + (this.border_thickness*2));
-			
-			// Slot image
-			ctx.fillStyle = '#0d0d0e';
-			ctx.fillRect(this.rect.x, this.rect.y, this.rect.w, this.rect.h);
+		// "Border"
+		if (this.data.grade == "yellow") {
+			// Yellow gear #9f854a
+			ctx.fillStyle = '#9f854a';
+		} else if (this.data.grade == "blue") {
+			// Blue gear #4698c4
+			ctx.fillStyle = '#4698c4';
+		} else {
+			ctx.fillStyle = '#3f4046';				
 		}
+
+		ctx.fillRect(this.rect.x - this.border_thickness, this.rect.y - this.border_thickness, this.rect.w + (this.border_thickness*2), this.rect.h + (this.border_thickness*2));
+		
+		// Slot image
+		ctx.fillStyle = '#0d0d0e';
+		ctx.fillRect(this.rect.x, this.rect.y, this.rect.w, this.rect.h);
+
 		ctx.drawImage(Store.getAsset(Game.data.items[this.id].image), 1, 1, this.rect.w, this.rect.h, this.rect.x, this.rect.y, this.rect.w, this.rect.h);
 		
 		
@@ -162,6 +161,24 @@ function Item(id,level) {
 			}
 			ctx.restore()
 		}
+	}
+}
+
+
+function Valk(id, level, amount) {
+	Item.call(this, id, level);
+
+	this.amount = amount;
+}
+
+
+function GrabItem(slot_id, item_id) {
+	this.item_id = item_id;
+	this.slot_id = slot_id;
+	this.rect = new Rect({"x":0, "y":0, "w":49, "h":49});
+
+	this.draw = function(ctx) {
+		ctx.drawImage(Store.getAsset(Game.data.items[this.item_id].image), 1, 1, this.rect.w, this.rect.h, this.rect.x, this.rect.y, this.rect.w, this.rect.h);
 	}
 }
 
@@ -220,6 +237,8 @@ function Shop() {
 	this.items[4].setItem(new Item(10, 0));
 	this.items[5].setItem(new Item(11, 0));
 	this.items[6].setItem(new Item(12, 0));
+	this.items[6].setItem(new Valk(13, 0));
+
 	
 
 	this.update = function() {
@@ -275,6 +294,8 @@ function Inventory() {
 	this.items[1].setItem(new Item(2, 0));
 	this.items[2].setItem(new Item(3, 0));
 	this.items[3].setItem(new Item(4, 0));
+	this.items[4].setItem(new Valk(9, 0, 50));
+
 
 
 	
@@ -559,11 +580,15 @@ function GUI() {
 
 	this.update = function() {
 
+		// 
+		//	ITEM DRAG
+		//
+
 		// Checking if item was grabbed by the mouse
 		if (this.enhancer.selected_item.item == null) {
-
 			var mousePos = {'x':Game.mousePos.x, 'y':Game.mousePos.y, 'w':1, 'h':1};
 			var mouseClickPos = {'x':0, 'y':0, 'w':1, 'h':1};
+
 			if (Game.mouseButtons.left && this.item_grab == null) {
 				mouseClickPos = {'x':Game.clickPos.x, 'y':Game.clickPos.y, 'w':1, 'h':1};
 			} else if (this.item_grab != null){
@@ -581,66 +606,94 @@ function GUI() {
 			for (var i=0; i<this.inventory.items.length; i++) {
 				if (this.inventory.items[i].item != null && collision(mouseClickPos, this.inventory.items[i].rect) && (Math.abs(Game.clickPos.x - mousePos.x) > 15 || Math.abs(Game.clickPos.y - mousePos.y) > 15) ) {
 					// Spawn an item bellow the mouse pointer
-					this.item_grab = new Item(this.inventory.items[i].item.id, this.inventory.items[i].item.level);
+					
+					this.item_grab = new GrabItem(i, this.inventory.items[i].item.id);
+					//this.item_grab = new Item(this.inventory.items[i].item.id, this.inventory.items[i].item.level);
 					this.item_grab.rect.x = mousePos.x;
 					this.item_grab.rect.y = mousePos.y;
-					this.item_grab_id = this.inventory.items[i].id;
-					this.item_grab.drag = true;
 				}
 			}
 			// On next click put the item in that slot
 			for (var i=0; i<this.inventory.items.length; i++) {
 				if (collision(mouseClickPos, this.inventory.items[i].rect) && collision(mouseReleasePos, this.inventory.items[i].rect) && this.item_grab != null) {
 					
-					var temp_item = this.inventory.items[i].item;
+					var temp_item = Object.assign({},this.inventory.items[i]); // Slot we want to place our grabbed item
 					// Place the item in new slot
-					this.inventory.items[i].setItem(this.item_grab);
-	
-					// Delete item from old slot
-					if (temp_item == null) {
-						this.inventory.items[this.item_grab_id].setItem(null);
-					} else {
-						this.inventory.items[this.item_grab_id].setItem(temp_item);
-					}
+
+					this.inventory.items[i].setItem(this.inventory.items[this.item_grab.slot_id].item);
 					
-					this.item_grab.drag = false;
+					// Delete item from old slot
+		
+					if (temp_item == null) {
+						this.inventory.items[this.item_grab.slot_id] = temp_item;
+					} else {
+						this.inventory.items[this.item_grab.slot_id].setItem(temp_item.item);
+					}
+	
 					this.item_grab = null;
 				}
 			}
 		}
+
+		// 
+		//	ITEM RIGHT CLICK
+		//
+
 		var rmbClick = {'x':Game.rmbClick.x, 'y':Game.rmbClick.y, 'w':1, 'h':1};
-			
+
 		// If item is clicked with right mouse button, place the item in the enhancer
-		for (var i=0; i<this.inventory.items.length; i++) { 	
-			if (collision(rmbClick, this.inventory.items[i].rect) && this.inventory.items[i].item != null  && this.inventory.items[i].item.level < Game.data.rates[this.inventory.items[i].item.data.type].max && this.inventory.items[i].item.data.type != 'misc') {
-				// Add enhance material
-				if (this.enhancer.selected_item.item != null && this.enhancer.selected_item.id != this.inventory.items[i].id && this.inventory.items[i].item.level == 0 && this.enhancer.enh_stone.id != this.inventory.items[i].id) {
-					// weapons / armor
-					if (this.inventory.items[i].item.data.for == this.enhancer.selected_item.item.data.type) {
-						if (this.enhancer.selected_item.item.level >= 15 && this.inventory.items[i].item.data.grade == "advanced") {
-							Store.getAsset("media/add_slot.mp3").play()
-							this.enhancer.setMaterial(this.inventory.items[i]);
+		for (var i=0; i<this.inventory.items.length; i++) {
+			if (collision(rmbClick, this.inventory.items[i].rect) && this.inventory.items[i].item != null) {
+				if (this.inventory.items[i].item.data.type == 'misc') { // Valk's cry, etc
+
+					if (this.inventory.items[i].item.data.name == "Advice of Valk") {
+
+						this.enhancer.failstacks = this.inventory.items[i].item.amount;
+						if (this.enhancer.selected_item.item != null) {
+							this.enhancer.calculateChance();
 						}
-						if (this.enhancer.selected_item.item.level < 15 && this.inventory.items[i].item.data.grade == "normal") {
-							Store.getAsset("media/add_slot.mp3").play()
-							this.enhancer.setMaterial(this.inventory.items[i]);
+					} else if (this.inventory.items[i].item.data.name == "Blacksmith's Secret Book") {
+						if (this.enhancer.failstacks > 0) {
+							this.inventory.items[i].setItem(new Valk(9, 0, this.enhancer.failstacks));
+							this.enhancer.failstacks = 0;
 						}
 					}
-					// Accessories / clothes
-					if ((this.inventory.items[i].item.data.type == "clothes" || this.inventory.items[i].item.data.type == "accessory") && this.inventory.items[i].item.id == this.enhancer.selected_item.item.id) {
-						Store.getAsset("media/add_slot.mp3").play()
-						this.enhancer.setMaterial(this.inventory.items[i]);
+
+				} else { // If item can be ehnanced
+					if (this.inventory.items[i].item.level < Game.data.rates[this.inventory.items[i].item.data.type].max) {
+						// Add enhance material
+						if (this.enhancer.selected_item.item != null && this.enhancer.selected_item.id != this.inventory.items[i].id && this.inventory.items[i].item.level == 0 && this.enhancer.enh_stone.id != this.inventory.items[i].id) {
+							// weapons / armor
+							if (this.inventory.items[i].item.data.for == this.enhancer.selected_item.item.data.type) {
+								if (this.enhancer.selected_item.item.level >= 15 && this.inventory.items[i].item.data.grade == "advanced") {
+									Store.getAsset("media/add_slot.mp3").play()
+									this.enhancer.setMaterial(this.inventory.items[i]);
+								}
+								if (this.enhancer.selected_item.item.level < 15 && this.inventory.items[i].item.data.grade == "normal") {
+									Store.getAsset("media/add_slot.mp3").play()
+									this.enhancer.setMaterial(this.inventory.items[i]);
+								}
+							}
+							// Accessories / clothes
+							if ((this.inventory.items[i].item.data.type == "clothes" || this.inventory.items[i].item.data.type == "accessory") && this.inventory.items[i].item.id == this.enhancer.selected_item.item.id) {
+								Store.getAsset("media/add_slot.mp3").play()
+								this.enhancer.setMaterial(this.inventory.items[i]);
+							}
+						}
+						
+						// Add item to enhance
+						if (this.inventory.items[i].item.data.type != "material" && this.enhancer.selected_item.id != this.inventory.items[i].id &&this.enhancer.selected_item.item == null) {
+							Store.getAsset("media/add_slot.mp3").play()
+							this.enhancer.removeMaterial();			
+							this.enhancer.setItem(this.inventory.items[i]);
+							this.enhancer.calculateChance();
+						}
 					}
 				}
-				
-				// Add item to enhance
-				if (this.inventory.items[i].item.data.type != "material" && this.enhancer.selected_item.id != this.inventory.items[i].id &&this.enhancer.selected_item.item == null) {
-					Store.getAsset("media/add_slot.mp3").play()
-					this.enhancer.removeMaterial();			
-					this.enhancer.setItem(this.inventory.items[i]);
-					this.enhancer.calculateChance();
-				} 
-			}
+
+			}  
+			
+			
 		}
 		// If RMB on enhancing item, remove it from the enhancer
 		if (collision(rmbClick, this.enhancer.selected_item.rect)) {
