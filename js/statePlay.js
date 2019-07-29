@@ -337,7 +337,15 @@ function Inventory() {
 	this.items[1].setItem(new Item(2, 0));
 	this.items[2].setItem(new Item(3, 0));
 	this.items[3].setItem(new Item(4, 0));
-	this.items[4].setItem(new Valk(9, 0, 50));
+	this.items[4].setItem(new Item(6, 19));
+	
+	this.items[6].setItem(new Item(11, 4));
+	this.items[7].setItem(new Item(11, 4));
+	this.items[8].setItem(new Item(11, 4));
+	
+	this.items[42].setItem(new Valk(9, 0, 120));
+	this.items[43].setItem(new Valk(9, 0, 258));
+	this.items[44].setItem(new Valk(9, 0, 400));
 
 
 
@@ -485,12 +493,21 @@ function Enhancer(inventory) {
 		var pre_soft = Game.data.rates[item_type][item_grade][this.selected_item.item.level][1];
 		var softcap = Game.data.rates[item_type][item_grade][this.selected_item.item.level][2];
 		var post_soft = Game.data.rates[item_type][item_grade][this.selected_item.item.level][3];
+		var hardcap = Game.data.rates[item_type][item_grade][this.selected_item.item.level][4];
 
-		this.chance = base + (this.failstacks*pre_soft);
-		if (this.chance >= softcap && this.chance < 100) {
+		
+		this.chance = base + (this.failstacks * pre_soft);
+
+
+		if (this.chance >= softcap ) {
+			console.log("chance bigger than softcap");
 			var x = (this.chance - softcap) / pre_soft;
-			
 			this.chance = softcap + (x * post_soft);
+
+			if (this.chance >= hardcap) {
+				this.chance = hardcap;	
+			}
+
 		}
 		
 	}
@@ -524,7 +541,8 @@ function Enhancer(inventory) {
 			}
 
 			// If PEN remove all from enhancer
-			if (this.selected_item.item.level == 20) {
+			if (this.selected_item.item.level == 20 || (this.selected_item.item.level == 5 && 
+				(this.selected_item.item.data.type == "accessory" || this.selected_item.item.data.type == "clothes"))) {
 				// Got PEN gz, remove from ehnancer
 				this.selected_item.item = null;
 				this.enh_stone.item = null;
@@ -553,8 +571,6 @@ function Enhancer(inventory) {
 				this.failstacks += 1;
 			}
 
-			this.calculateChance();
-
 			// If enhancement level > 15, reduce it by a level on fail
 			if (this.selected_item.item.level > 16) {
 				this.selected_item.item.level -= 1;
@@ -566,7 +582,11 @@ function Enhancer(inventory) {
 				this.inventory.items[this.selected_item.id].item = null;
 				this.removeMaterial();
 				this.removeItem();
+				return;
 			}
+
+			this.calculateChance();
+
 		}
 	}
 
