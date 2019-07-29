@@ -32,7 +32,7 @@ function Slot(x,y,id, item_) {
 		var mousePos = {'x':Game.mousePos.x, 'y':Game.mousePos.y, 'w':1, 'h':1};
 		// Flash the slot and fade over time
 		if(collision(mousePos, this.rect) && this.can_fade) {
-			//Store.getAsset("media/slot_mouseover.mp3").stop()
+			Store.getAsset("media/slot_mouseover.mp3").stop()
 			Store.getAsset("media/slot_mouseover.mp3").playOnce()
 			if (this.alpha == 0 && !this.fading) {
 				this.alpha = 0.6;
@@ -169,6 +169,49 @@ function Valk(id, level, amount) {
 	Item.call(this, id, level);
 
 	this.amount = amount;
+
+
+
+	this.draw = function(ctx) {
+
+		// "Border"
+		if (this.data.grade == "yellow") {
+			// Yellow gear #9f854a
+			ctx.fillStyle = '#9f854a';
+		} else if (this.data.grade == "blue") {
+			// Blue gear #4698c4
+			ctx.fillStyle = '#4698c4';
+		} else {
+			ctx.fillStyle = '#3f4046';				
+		}
+
+		ctx.fillRect(this.rect.x - this.border_thickness, this.rect.y - this.border_thickness, this.rect.w + (this.border_thickness*2), this.rect.h + (this.border_thickness*2));
+		
+		// Slot image
+		ctx.fillStyle = '#0d0d0e';
+		ctx.fillRect(this.rect.x, this.rect.y, this.rect.w, this.rect.h);
+
+		ctx.drawImage(Store.getAsset(Game.data.items[this.id].image), 1, 1, this.rect.w, this.rect.h, this.rect.x, this.rect.y, this.rect.w, this.rect.h);
+		
+		
+		// Enhancement level
+		if (this.amount != null) {
+			// TODO adjust the position of text for > +10
+			ctx.save()
+			ctx.font = "bold 16px cambria";
+			ctx.fillStyle = "white";
+			ctx.shadowBlur = 6;
+			ctx.shadowColor = "red";
+			
+			if (this.amount / 10 >= 1)
+				ctx.fillText("+" + this.amount, this.rect.x + 4, this.rect.y + 25);
+			else
+				ctx.fillText("+" + this.amount, this.rect.x + 10, this.rect.y + 25);
+
+			
+			ctx.restore()
+		}
+	}
 }
 
 
@@ -647,15 +690,22 @@ function GUI() {
 				if (this.inventory.items[i].item.data.type == 'misc') { // Valk's cry, etc
 
 					if (this.inventory.items[i].item.data.name == "Advice of Valk") {
-
-						this.enhancer.failstacks = this.inventory.items[i].item.amount;
-						if (this.enhancer.selected_item.item != null) {
-							this.enhancer.calculateChance();
+						// Add the stacks from the valk's enh chance
+						if (this.enhancer.failstacks == 0) {
+							this.enhancer.failstacks = this.inventory.items[i].item.amount;
+							this.inventory.items[i].item = null;
+							if (this.enhancer.selected_item.item != null) {
+								this.enhancer.calculateChance();
+							}
 						}
 					} else if (this.inventory.items[i].item.data.name == "Blacksmith's Secret Book") {
 						if (this.enhancer.failstacks > 0) {
 							this.inventory.items[i].setItem(new Valk(9, 0, this.enhancer.failstacks));
 							this.enhancer.failstacks = 0;
+							Game.rmbClick = {'x':0, 'y':0};
+							if (this.enhancer.selected_item.item != null) {
+								this.enhancer.calculateChance();
+							}
 						}
 					}
 
